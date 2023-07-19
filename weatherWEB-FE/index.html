@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 
+        primary meta tags
+     -->
+    <title>weatherio</title>
+    <meta name="title" content="weatherio" />
+
+    <!-- 
+        favicon
+     -->
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml" />
+
+    <!-- 
+        Google font
+     -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
+    <!-- js -->
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"
+        integrity="sha512-k8WL9L2jG8KyG3pCJA4mHMdg2YSoWrdB5QNqLIhROv69udwp87WvbqzbsiAL65wy7T9jHU7rAoePr1ToPBc0Lw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- 
+        #HEADER
+    -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">
+                <img src="https://actvn.edu.vn/Images/actvn_big_icon.png" alt="logo" >
+            </a>
+            <img src="https://actvn.edu.vn/Images/dongchu_banner.png" alt="logo" >
+        </div>
+    </header>
+
+
+    <!-- 
+        #MAIN
+    -->
+    <main>
+        <article class="container" data-container>
+            <div class="content-left">
+
+                <!-- CURRENT WEATHER -->
+                <section class="section current-weather">
+                    <div class="card card-lg current-weather-card">
+                        <h2 class="title-2 card-title">Now</h2>
+
+                        <div class="wrapper">
+                            <p class="heading" id="TemperatureWeather">Null°<sup>c</sup></p> <!-- 25°c-->
+
+                            <img src="./assets/images/weather_icons/04n.png" alt="overcast clouds" class="weather-icon"
+                                width="64" height="64" id="iconWeather">
+                        </div>
+
+                        <p class="body-3" id="WeatherText">trời nắng</p>
+
+                        <ul class="meta-list">
+                            <li class="meta-item">
+                                <span class="m-icon">calendar_today</span>
+
+                                <p class="title-3 meta-text" id="currentDate">Monday 8, May</p>
+                            </li>
+
+                            <li class="meta-item">
+                                <span class="m-icon">location_on</span>
+
+                                <p class="title-3 meta-text" data-location="">Hanoi, VN</p>
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <!-- <section class="section current-weather">
+                    <div class="card card-lg current-weather-card">
+                        <h2 class="title-2 card-title">Tomorrow</h2>
+
+                        <div class="wrapper">
+                            <p class="heading" id="
+                            TemperatureWeatherTomorrow">24°<sup>c</sup></p> 
+                            <img src="./assets/images/weather_icons/04n.png" alt="overcast clouds" class="weather-icon"
+                                width="64" height="64" id="iconWeatherTomorrow">
+                        </div>
+
+                        <p class="body-3" id="WeatherTextTomorrow">overcast clouds</p>
+                    </div>
+                </section> -->
+
+                <section class="section forecast">
+                    <h2 class="title-2" id="forecast-label">7 Days </h2>
+
+                    <div class="card card-lg forecast-card">
+                        <ul id="forecast-list">
+                            
+                        </ul>
+
+                    </div>
+                </section>
+
+            </div>
+
+
+            <div class="content-right">
+
+                <!-- HIGHLIGHTS -->
+                <section class="section highlights">
+                    <div class="card card-lg">
+                        <h2 class="title-2" id="highlights-label">Todays Highlights</h2>
+
+                        <div class="highlight-list">
+                            <div class="card card-sm highlight-card two" style="display: block;">
+                                <h3 class="title-3">Warning</h3>
+                                <p id="number-warning-text">Cảnh báo cho: </p>
+                                <p id="Warning-text">
+                                </p>
+                            </div>
+
+                            <div class="card card-sm highlight-card air-card">
+                                <h3 class="title-3" id="air-card-text">Air Quality Index</h3>
+
+                                <div class="wrapper">
+
+                                    <span class="m-icon" id="air-card-icon">air</span>
+
+                                    <ul class="card-list">
+                                        <li class="card-item">
+                                            <p class="title-1" id="air-card-number">25.1</p>
+
+                                            <p class="label-1">PM<sub>2.5</sub></p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+
+
+                            <div class="card card-sm highlight-card Humidity-card-max">
+                                <h3 class="title-3" id="Humidity-card-max-text">Humidity Max</h3>
+
+                                <div class="wrapper">
+                                    <span class="m-icon">humidity_percentage</span>
+
+                                    <p class="title-1" id="Humidity-card-max-number">83<sub>%</sub></p>
+                                </div>
+                            </div>
+
+                            <div class="card card-sm highlight-card Humidity-card-min">
+                                <h3 class="title-3" id="Humidity-card-min-text">Humidity Min</h3>
+
+                                <div class="wrapper">
+                                    <span class="m-icon">humidity_percentage</span>
+
+                                    <p class="title-1" id="Humidity-card-min-number">83<sub>%</sub></p>
+                                </div>
+                            </div>
+
+                            <div class="card card-sm highlight-card Temperature-card-max">
+                                <h3 class="title-3" id="Temperature-card-max-text">Temperature Max</h3>
+
+                                <div class="wrapper">
+                                    <span class="m-icon">thermostat</span>
+
+                                    <p class="title-1" id="Temperature-card-max-number">24°<sup>c</sup></p>
+                                </div>
+                            </div>
+
+                            <div class="card card-sm highlight-card Temperature-card-min">
+                                <h3 class="title-3" id="Temperature-card-min-text">Temperature Min</h3>
+
+                                <div class="wrapper">
+                                    <span class="m-icon">thermostat</span>
+
+                                    <p class="title-1" id="Temperature-card-min-number">24°<sup>c</sup></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- HOURLY  -->
+                <section class="section current-weather">
+                    <div class="card card-lg current-weather-card">
+                        <h2 class="title-2 card-title">Days</h2>
+
+                        <div>
+                            <canvas id="chart"></canvas>
+                        </div>
+
+
+                    </div>
+                </section>
+
+                <!-- 
+                #FOOTER
+                -->
+                <footer class="footer">
+
+                </footer>
+            </div>
+        </article>
+    </main>
+    <script src="./assets/js/MqttPublisher.js"></script>    
+    <script src="./assets/js/SignalR.js"></script>   
+    <script src="./assets/js/App.js"></script> 
+</body>
+
+</html>
